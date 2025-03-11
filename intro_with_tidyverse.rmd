@@ -1,0 +1,59 @@
+```{r}
+employees <- data.frame(
+		  ID = 1:6,
+		  Name = c("Alice", "Bob", "Charlie", "David", "Eve", "Frank"),
+		  Age = c(25, 30, 35, 40, 45, 50),
+		  Department = c("HR", "IT", "Finance", "IT", "HR", "Finance"),
+		  Salary = c(50000, 60000, 70000, 80000, 55000, 75000)
+		)
+
+print(employees)
+str(employees)
+summary(employees)
+
+# Filter rows: Create a new data frame that includes only employees who work in the "IT" department.
+employees_IT <- employees %>% filter(Department == "IT")
+print(employees_IT)
+
+#Select columns: Create a new data frame that includes only the Name and Salary columns.
+employees_name_salary  <- employees %>% select(Name, Salary)
+print(employees_name_salary)
+
+# Add a new column: Add a new column called Bonus that calculates a 10% bonus for each employee based on their salary.
+employees <- employees %>% mutate(Bonus = Salary*0.1)
+print(employees)
+
+#Sort rows: Sort the employees data frame by Salary in descending order.
+employees <- employees %>% arrange(desc(Salary))
+
+# Summarize data: Calculate the average salary for each department.
+summary_df <- employees %>% 
+  group_by(Department) %>%
+  summarize(mean_salary = mean(Salary))
+print(summary_df)
+
+#Extra 1: Advanced Data Manipulation
+#Group and summarize: Group the data by Department and calculate the total salary expenditure for each department.
+#Filter and mutate: Create a new data frame that includes only employees older than 30 and adds a column called Experience that assumes each employee has Age - 25 years of experience.
+employees_over30 <- employees %>% filter(Age > 30)
+employees_over30 <- employees_over30 %>% mutate(Experience = Age - 25)
+
+# Extra 2: Challenge
+# Combine operations: Create a new data frame that includes employees from the "HR" department, adds a Bonus column (10% of salary), and sorts the data by Bonus in descending order.
+employees_HR <- employees %>% 
+                filter(Department == "HR") %>%
+                mutate(Bonus = Salary * 0.1) %>%
+                arrange(desc(Bonus))
+
+# Visualize data: Use ggplot2 to create a bar plot showing the total salary expenditure by department.
+exp_department <- employees %>% 
+  group_by(Department) %>%
+  summarize(mean_salary = sum(Salary))
+
+ggplot(exp_department, mapping = aes(x=Department, y = mean_salary)) + 
+  geom_bar(stat = "identity", fill="skyblue") +
+  labs(title = "Salary by Department", x = "Department", y = "Salary") +
+  theme_minimal()
+
+
+```
